@@ -23,7 +23,11 @@ object Format {
     fun accuracy(metres: Float, decimalComma: Boolean): String =
         "±" + String.format(if (decimalComma) indonesian else Locale.US, "%.1f", metres) + " m"
 
-    /** Lat/long always use a dot so the comma can separate the pair. */
+    /** One coordinate in decimal degrees, 6 decimals (~0.1 m): -6.175392 or -6,175392. */
+    fun degrees(value: Double, decimalComma: Boolean): String =
+        String.format(if (decimalComma) indonesian else Locale.US, "%.6f", value)
+
+    /** Lat/long pair; always uses a dot so the comma can separate the pair. */
     fun latLon(latitude: Double, longitude: Double): String =
         String.format(Locale.US, "%.6f, %.6f", latitude, longitude)
 

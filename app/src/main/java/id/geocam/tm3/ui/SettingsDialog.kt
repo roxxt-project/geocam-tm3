@@ -50,7 +50,7 @@ fun SettingsDialog(initial: StampSettings, onDismiss: () -> Unit, onSave: (Stamp
                 Spacer(Modifier.height(12.dp))
                 ToggleRow(
                     title = "Koma desimal",
-                    subtitle = "Contoh: " + Format.metres(236205.15, decimalComma) + " m",
+                    subtitle = "Contoh: " + Format.degrees(-6.175392, decimalComma),
                     checked = decimalComma,
                     onChange = { decimalComma = it },
                 )

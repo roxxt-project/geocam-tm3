@@ -57,7 +57,7 @@ object StampRenderer {
         val x = left + bar + pad
         var baseline = top + pad - metrics.ascent
         for (line in wrapped) {
-            paint.color = if (line.startsWith(StampText.ZONE_PREFIX)) ACCENT else Color.WHITE
+            paint.color = if (line.startsWith(StampText.LAT_PREFIX) || line.startsWith(StampText.LONG_PREFIX)) ACCENT else Color.WHITE
             canvas.drawText(line, x, baseline, paint)
             baseline += lineHeight
         }

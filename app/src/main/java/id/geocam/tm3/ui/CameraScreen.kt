@@ -105,7 +105,6 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import id.geocam.tm3.SettingsStore
-import id.geocam.tm3.geo.Tm3
 import id.geocam.tm3.location.AddressLookup
 import id.geocam.tm3.location.LocationTracker
 import id.geocam.tm3.stamp.Format
@@ -533,7 +532,6 @@ private fun InfoCard(
     locationOff: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    val point = location?.let { Tm3.project(it.latitude, it.longitude) }
     val accuracy = location?.takeIf { it.hasAccuracy() }?.accuracy
     val shape = RoundedCornerShape(24.dp)
     Row(
@@ -549,7 +547,7 @@ private fun InfoCard(
         Column(Modifier.weight(1f)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = point?.let { "TM-3  ${it.zone.name}" } ?: "TM-3",
+                    text = "WGS 84",
                     color = Color.Black,
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 12.sp,
@@ -581,26 +579,17 @@ private fun InfoCard(
                     color = Muted,
                     fontSize = 15.sp,
                 )
-                point == null -> Text("Di luar cakupan TM-3\n(93°–141° BT)", color = Muted, fontSize = 15.sp)
                 else -> {
-                    CoordinateRow("X", Format.metres(point.easting, decimalComma))
-                    CoordinateRow("Y", Format.metres(point.northing, decimalComma))
+                    CoordinateRow("Lat", Format.degrees(location.latitude, decimalComma))
+                    CoordinateRow("Long", Format.degrees(location.longitude, decimalComma))
                 }
             }
 
-            if (location != null) {
+            if (location != null && !address.isNullOrBlank()) {
                 Spacer(Modifier.height(6.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(Icons.Filled.LocationOn, contentDescription = null, tint = Muted, modifier = Modifier.size(12.dp))
                     Spacer(Modifier.width(4.dp))
-                    Text(
-                        Format.latLon(location.latitude, location.longitude),
-                        color = Muted,
-                        fontSize = 12.sp,
-                        fontFamily = FontFamily.Monospace,
-                    )
-                }
-                if (!address.isNullOrBlank()) {
                     Text(address, color = Muted, fontSize = 12.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
             }
@@ -613,9 +602,15 @@ private fun InfoCard(
 @Composable
 private fun CoordinateRow(label: String, value: String) {
     Row(verticalAlignment = Alignment.Bottom) {
-        Text(label, color = Orange, fontSize = 14.sp, fontWeight = FontWeight.Bold, modifier = Modifier.width(20.dp))
+        Text(
+            label,
+            color = Orange,
+            fontSize = 13.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.width(44.dp).padding(bottom = 3.dp),
+        )
         Text(value, color = Color.White, fontSize = 24.sp, fontFamily = FontFamily.Monospace, fontWeight = FontWeight.SemiBold)
-        Text(" m", color = Muted, fontSize = 13.sp, modifier = Modifier.padding(bottom = 3.dp))
+        Text("°", color = Muted, fontSize = 18.sp, modifier = Modifier.padding(bottom = 2.dp))
     }
 }
 
